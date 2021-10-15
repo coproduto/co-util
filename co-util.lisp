@@ -9,16 +9,15 @@
       (make-pathname :directory '(:absolute :home))
       (truename path-string)))
 
-(defun ls ()
-  (directory "*.*"))
+(defun ls (&optional (path-string "./*.*"))
+  (directory path-string))
 
 (defun cd (path-string)
   (let
       ((full-path (expand-path-string path-string)))
-    (progn
-      (setq common-lisp:*default-pathname-defaults* full-path)
-      (sb-posix:chdir full-path)
-      full-path)))
+    (setq common-lisp:*default-pathname-defaults* full-path)
+    (sb-posix:chdir full-path)
+    full-path))
 
 (defun pwd ()
-  (pathname (sb-posix:getcwd)))
+  (pathname (concatenate 'string (sb-posix:getcwd) "/")))
